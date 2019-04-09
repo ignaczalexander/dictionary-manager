@@ -1,0 +1,5 @@
+export const GET_ERRORS = "GET_ERRORS";
+export const CLEAR_ERRORS = "CLEAR_ERRORS";
+
+export const ADD_DICTIONARY = "ADD_DICTIONARY";
+export const GET_DICTIONARIES = "GET_DICTIONARIES";
