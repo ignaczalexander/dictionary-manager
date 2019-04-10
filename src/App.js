@@ -25,7 +25,7 @@ class App extends Component {
     return (
       <div>
         <Navbar />
-        <div className="container p-3">
+        <div className="container">
           <AddDictionary />
           {dictsPlace}
         </div>

@@ -97,7 +97,7 @@ class DicitonaryHeader extends Component {
         <div className="col-auto">
           <div className="dropdown">
             <i
-              className="fas fa-ellipsis-v cursor"
+              className="fas fa-ellipsis-v cursor px-2"
               id="dropdownMenuButton"
               data-toggle="dropdown"
               aria-haspopup="true"

@@ -30,7 +30,7 @@ class AddDictionary extends Component {
     const { errors } = this.state;
 
     return (
-      <div className="add-dictionary">
+      <div className="add-dictionary my-4">
         <form onSubmit={this.onSubmit}>
           <div className="form-row">
             <div className="form-group col">

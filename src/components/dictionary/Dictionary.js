@@ -59,7 +59,7 @@ class Dictionary extends Component {
       );
 
     return (
-      <div className="dictionary p-3 mb-3 border">
+      <div className="dictionary p-3 mb-3 border rounded">
         <DicitonaryHeader
           expanded={this.state.expanded}
           toggleDropDown={this.toggleDropDown}
