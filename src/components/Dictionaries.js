@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Dictionary from "./Dictionary";
+import Dictionary from "./dictionary/Dictionary";
 
 export default class Dictionaries extends Component {
   render() {
@@ -9,6 +9,6 @@ export default class Dictionaries extends Component {
     dictList = dictionaries.map(dict => (
       <Dictionary key={dict._id} dictionary={dict} />
     ));
-    return <div>{dictList}</div>;
+    return <div className="dictionary-list">{dictList}</div>;
   }
 }
