@@ -44,6 +44,7 @@ class Dictionary extends Component {
               <th>Range</th>
               <th>Edit</th>
               <th>Delete</th>
+              <th>Message</th>
             </tr>
           </thead>
           <tbody>{rows}</tbody>
@@ -56,7 +57,10 @@ class Dictionary extends Component {
           <h4>{dictionary.name}</h4>
           <AddRow dictionary={this.props.dictionary} />
           {tablePlace}
-          <button className="btn btn-danger" onClick={this.onDelete}>
+          <button
+            className="btn btn-danger float-right"
+            onClick={this.onDelete}
+          >
             Delete dictionary
           </button>
         </div>
