@@ -1,15 +1,18 @@
 import React, { Component } from "react";
-import DictionaryRow from "./DictionaryRow";
-import PropTypes from "prop-types";
+import "../../App.css";
 import { connect } from "react-redux";
-import { deleteDictionary, deleteDictRow } from "../actions/dictActions";
+import PropTypes from "prop-types";
+import { deleteDictionary, deleteDictRow } from "../../actions/dictActions";
+import DicitonaryHeader from "./header/DicitonaryHeader";
 import AddRow from "./AddRow";
+import DictionaryRow from "./DictionaryRow";
 
 class Dictionary extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      errors: {}
+      errors: {},
+      expanded: false
     };
   }
   onChange = e => {
@@ -17,10 +20,14 @@ class Dictionary extends Component {
   };
 
   onDelete = e => {
-    this.props.deleteDictionary(this.props.dictionary._id);
+    if (window.confirm("Are you sure you wish to delete this item?"))
+      this.props.deleteDictionary(this.props.dictionary._id);
   };
   onDeleteRow = row_id => {
     this.props.deleteDictRow(this.props.dictionary._id, row_id);
+  };
+  toggleDropDown = e => {
+    this.setState({ expanded: !this.state.expanded });
   };
 
   render() {
@@ -35,7 +42,7 @@ class Dictionary extends Component {
     ));
     const tablePlace =
       dictionary.rows.length === 0 ? (
-        <p className="text-center">This dictionary is empty</p>
+        <p className="text-center text-muted">This dictionary is empty</p>
       ) : (
         <table className="table table-sm">
           <thead>
@@ -52,18 +59,20 @@ class Dictionary extends Component {
       );
 
     return (
-      <div className="row mb-3">
-        <div className="col-md-10 p-3 shadow-sm">
-          <h4>{dictionary.name}</h4>
-          <AddRow dictionary={this.props.dictionary} />
-          {tablePlace}
-          <button
-            className="btn btn-danger float-right"
-            onClick={this.onDelete}
-          >
-            Delete dictionary
-          </button>
-        </div>
+      <div className="dictionary p-3 mb-3 border">
+        <DicitonaryHeader
+          expanded={this.state.expanded}
+          toggleDropDown={this.toggleDropDown}
+          dictionary={this.props.dictionary}
+          onDelete={this.onDelete}
+        />
+
+        {this.state.expanded && (
+          <div className="dictionary-body p-3">
+            <AddRow dictionary={this.props.dictionary} />
+            {tablePlace}
+          </div>
+        )}
       </div>
     );
   }

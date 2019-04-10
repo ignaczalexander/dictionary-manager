@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { updateDictRow } from "../actions/dictActions";
+import { updateDictRow } from "../../actions/dictActions";
 
 class DictionaryRow extends Component {
   constructor(props) {
@@ -53,7 +53,7 @@ class DictionaryRow extends Component {
       <tr>
         <td>
           {currentlyEditing ? (
-            <div className="form-group m-0">
+            <div>
               <input
                 className="form-control form-control-sm"
                 type="text"
@@ -92,23 +92,14 @@ class DictionaryRow extends Component {
         <td>
           {currentlyEditing ? (
             <div>
-              <button
-                className="btn btn-sm btn-success"
-                onClick={this.saveEdit}
-              >
-                Save
-              </button>
-              <button
-                className="btn btn-sm btn-danger"
+              <i className="fas fa-check px-2 cursor" onClick={this.saveEdit} />
+              <i
+                className="fas fa-times px-2 cursor"
                 onClick={this.stopEditing}
-              >
-                Cancel
-              </button>
+              />
             </div>
           ) : (
-            <button className="btn btn-sm btn-info" onClick={this.startEditing}>
-              Edit
-            </button>
+            <i className="fas fa-pen px-2 cursor" onClick={this.startEditing} />
           )}
         </td>
         <td>
