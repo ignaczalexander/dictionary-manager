@@ -8,6 +8,7 @@ import {
 } from "./actions/dictActions";
 import "./App.css";
 import Dictionaries from "./components/Dictionaries";
+import Navbar from "./components/navbar/Navbar";
 
 class App extends Component {
   constructor(props) {
@@ -49,38 +50,40 @@ class App extends Component {
         </div>
       );
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-md-10">
-            <h1>Dictionary manager</h1>
-            <form onSubmit={this.onSubmit}>
-              <div className="form-row">
-                <div className="form-group col">
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="name"
-                    placeholder="Dictionary name"
-                    onChange={this.onChange}
-                  />
-                  {errors.name && (
-                    <div className="invalid-feedback d-block">
-                      {errors.name}
-                    </div>
-                  )}
+      <div className="">
+        <Navbar />
+        <div className="container">
+          <div className="row">
+            <div className="col-md-10">
+              <form onSubmit={this.onSubmit}>
+                <div className="form-row">
+                  <div className="form-group col">
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="name"
+                      placeholder="Dictionary name"
+                      onChange={this.onChange}
+                    />
+                    {errors.name && (
+                      <div className="invalid-feedback d-block">
+                        {errors.name}
+                      </div>
+                    )}
+                  </div>
+                  <div className="form-group col">
+                    <input
+                      type="submit"
+                      value="Create dictionary"
+                      className="btn btn-primary"
+                    />
+                  </div>
                 </div>
-                <div className="form-group col">
-                  <input
-                    type="submit"
-                    value="Create dictionary"
-                    className="btn btn-primary"
-                  />
-                </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
+          {dictsPlace}
         </div>
-        {dictsPlace}
       </div>
     );
   }
