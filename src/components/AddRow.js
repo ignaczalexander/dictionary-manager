@@ -13,8 +13,11 @@ class AddRow extends Component {
     };
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
+    if (
+      nextProps.errors.add_row &&
+      nextProps.errors.dict_id === this.props.dictionary._id
+    ) {
+      this.setState({ errors: nextProps.errors.add_row });
     }
   }
   onChange = e => {
@@ -34,7 +37,7 @@ class AddRow extends Component {
           <div className="col-5">
             <div className="form-group">
               <input
-                className="form-control"
+                className="form-control form-control-sm"
                 type="text"
                 name="domain"
                 placeholder="Domain"
@@ -49,7 +52,7 @@ class AddRow extends Component {
             {" "}
             <div className="form-group">
               <input
-                className="form-control"
+                className="form-control form-control-sm"
                 type="text"
                 name="range"
                 placeholder="Range"
@@ -64,7 +67,7 @@ class AddRow extends Component {
             <input
               type="submit"
               value="Add row"
-              className="btn btn-primary btn-block"
+              className="btn btn-primary btn-block btn-sm"
             />
           </div>
         </div>

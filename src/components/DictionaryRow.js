@@ -21,8 +21,11 @@ class DictionaryRow extends Component {
     });
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.errors.row) {
-      this.setState({ errors: nextProps.errors.row });
+    if (
+      nextProps.errors.update_row &&
+      nextProps.errors.row_id === this.props.row._id
+    ) {
+      this.setState({ errors: nextProps.errors.update_row });
     }
   }
   startEditing = e => {
@@ -88,25 +91,26 @@ class DictionaryRow extends Component {
         </td>
         <td>
           {currentlyEditing ? (
-            <button className="btn btn-sm btn-success" onClick={this.saveEdit}>
-              Save
-            </button>
+            <div>
+              <button
+                className="btn btn-sm btn-success"
+                onClick={this.saveEdit}
+              >
+                Save
+              </button>
+              <button
+                className="btn btn-sm btn-danger"
+                onClick={this.stopEditing}
+              >
+                Cancel
+              </button>
+            </div>
           ) : (
             <button className="btn btn-sm btn-info" onClick={this.startEditing}>
               Edit
             </button>
           )}
         </td>
-        {currentlyEditing && (
-          <td>
-            <button
-              className="btn btn-sm btn-danger"
-              onClick={this.stopEditing}
-            >
-              Cancel
-            </button>
-          </td>
-        )}
         <td>
           <button
             className="btn btn-sm btn-danger"
@@ -115,10 +119,14 @@ class DictionaryRow extends Component {
             Delete row
           </button>
         </td>
+        <td>
+          {row.msg.chain || row.msg.cycle || row.msg.fork || row.msg.duplicate}
+        </td>
       </tr>
     );
   }
 }
+
 DictionaryRow.propTypes = {
   updateDictRow: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired
