@@ -8,20 +8,21 @@ import {
   validateAddDictionary,
   validateAddRow
 } from "../validation/dictionary";
+import {
+  DUPLICATE_ERROR,
+  FORK_ERROR,
+  CYCLE_ERROR,
+  CHAIN_ERROR
+} from "../utils/errors";
 const uuidv4 = require("uuid/v4");
 
 //get all dictionaries
 export const getDictionaries = () => dispatch => {
   if (localStorage.getItem("dictionaries")) {
-    console.log(" dicts in storage");
-
     const dicts = JSON.parse(localStorage.getItem("dictionaries"));
-
     dicts.map(dict => evaluateDictionary(dict));
     dispatch({ type: GET_DICTIONARIES, payload: dicts });
   } else {
-    console.log("no dicts in storage");
-
     dispatch({ type: GET_DICTIONARIES, payload: [] });
   }
 };
@@ -36,20 +37,15 @@ export const addDictionary = dictData => dispatch => {
   dispatch(clearErrors());
 
   dictData._id = uuidv4();
-  dictData.rows = [
-    { _id: uuidv4(), domain: "This", range: "that", msg: {} },
-    { _id: uuidv4(), domain: "This", range: "that", msg: {} },
-    { _id: uuidv4(), domain: "This", range: "that", msg: {} }
-  ];
+
   let dicts = [];
 
   if (localStorage.getItem("dictionaries")) {
     dicts = JSON.parse(localStorage.getItem("dictionaries"));
   }
 
-  dicts.push(evaluateDictionary(dictData));
+  dicts.push(dictData);
   localStorage.setItem("dictionaries", JSON.stringify(dicts));
-
   dispatch({ type: ADD_DICTIONARY, payload: dictData });
 };
 
@@ -81,8 +77,6 @@ export const addDictRow = (dict_id, rowData) => dispatch => {
     rowData.msg = {};
     const dicts = JSON.parse(localStorage.getItem("dictionaries")).map(dict => {
       if (dict._id === dict_id) {
-        //rowData.msg = checkConsistency(dict, rowData);
-
         dict.rows.push(rowData);
       }
       return evaluateDictionary(dict);
@@ -105,7 +99,6 @@ export const updateDictRow = (dict_id, row_id, rowData) => dispatch => {
   dispatch(clearErrors());
   if (localStorage.getItem("dictionaries")) {
     rowData._id = uuidv4();
-    console.log(rowData);
     const dicts = JSON.parse(localStorage.getItem("dictionaries")).map(dict => {
       if (dict._id === dict_id) {
         dict.rows = dict.rows.map(row => {
@@ -116,6 +109,30 @@ export const updateDictRow = (dict_id, row_id, rowData) => dispatch => {
         });
       }
       return evaluateDictionary(dict);
+    });
+    localStorage.setItem("dictionaries", JSON.stringify(dicts));
+    dispatch({ type: GET_DICTIONARIES, payload: dicts });
+  }
+};
+
+//update dictionary name
+export const updateDictionary = (dict_id, dictData) => dispatch => {
+  const { errors, isValid } = validateAddDictionary(dictData);
+
+  if (!isValid) {
+    return dispatch({
+      type: GET_ERRORS,
+      payload: { update_dict: errors, dict_id }
+    });
+  }
+  dispatch(clearErrors());
+
+  if (localStorage.getItem("dictionaries")) {
+    const dicts = JSON.parse(localStorage.getItem("dictionaries")).map(dict => {
+      if (dict._id === dict_id) {
+        dict.name = dictData.name;
+      }
+      return dict;
     });
     localStorage.setItem("dictionaries", JSON.stringify(dicts));
     dispatch({ type: GET_DICTIONARIES, payload: dicts });
@@ -151,34 +168,26 @@ const evaluateDictionary = dict => {
     for (let j = 0; j < dict.rows.length; j++) {
       const nextRow = dict.rows[j];
       if (nextRow._id !== row._id) {
-        console.log("next row");
-        console.log(nextRow);
         let msg = {};
         if (row.domain === nextRow.domain) {
           //can be duplicate or fork
           if (row.range === nextRow.range) {
             //its a duplicate
-            msg.duplicate =
-              "DUP: This row maps to the same value as an other in this dictionary";
+            msg.duplicate = DUPLICATE_ERROR;
           } else {
             //its a fork
-            msg.fork =
-              "FORK: Two rows in the dictionary map to different values";
+            msg.fork = FORK_ERROR;
           }
         }
         if (row.range === nextRow.domain) {
           //can be cycle or chain
           if (row.domain === nextRow.range) {
-            msg.cycle =
-              "CYCL: Two or more rows in a dictionary result in cycles";
+            msg.cycle = CYCLE_ERROR;
           } else {
-            msg.chain =
-              "CHAIN: A chain structure in the dictionary (a value in Range column also appears in Domain column of another entry)";
+            msg.chain = CHAIN_ERROR;
           }
         }
-        console.log(row.msg);
         row.msg = { ...row.msg, ...msg };
-        console.log(row.msg);
       }
     }
   }
