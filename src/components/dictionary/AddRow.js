@@ -24,9 +24,6 @@ class AddRow extends Component {
       Object.keys(nextProps.errors).length === 0 &&
       nextProps.dictionary._id === this.props.dictionary._id
     ) {
-      console.log(nextProps.dictionary._id);
-      console.log(this.props.dictionary._id);
-
       this.setState({ domain: "", range: "" });
     }
   }
