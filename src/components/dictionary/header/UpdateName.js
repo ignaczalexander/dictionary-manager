@@ -21,7 +21,7 @@ export default class UpdateName extends Component {
           )}
         </div>
         <div className="form-group mr-2">
-          <i type="submit" className="fas fa-check" />
+          <i onClick={this.props.saveEdit} className="fas fa-check" />
         </div>
         <div className="form-group mb-2">
           <i className="fas fa-times" onClick={this.props.stopEditing} />

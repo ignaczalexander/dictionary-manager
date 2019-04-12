@@ -48,6 +48,7 @@ class DicitonaryHeader extends Component {
     });
   };
   saveEdit = e => {
+    e.preventDefault();
     this.props.updateDictionary(this.props.dictionary._id, {
       name: this.state.name
     });
