@@ -3,6 +3,9 @@ clean or normalise values in dataset columns.
 
 ## Available Scripts
 
+Before running it the first time, run:
+### `npm i`
+
 In the project directory, you can run:
 
 ### `npm start`
